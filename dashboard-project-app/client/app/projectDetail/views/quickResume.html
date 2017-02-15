@@ -38,10 +38,22 @@
         <div class="col-xs-3">
           <i class="fa fa-calendar" aria-hidden="true"></i>
          <strong> Created on</strong> {{userStory.createdOn}}
+
+         <div class="text-warning" ng-show="warnings.createdOn">
+            <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+            {{warnings.createdOn.message}}
+          </div>
+
         </div>
         <div class="col-xs-3">
           <i class="fa fa-calendar" aria-hidden="true"></i>
           <strong>Updated on</strong> {{userStory.updatedOn}}
+
+          <div class="text-warning" ng-show="warnings.updatedOn">
+            <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+            {{warnings.updatedOn.message}}
+          </div>
+          
         </div>
       </div>
       <div class="row add-margin-top">
