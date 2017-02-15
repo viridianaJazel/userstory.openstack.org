@@ -32,7 +32,7 @@ angular.module('dashboardProjectApp')
     this.compareDates = function(craetedOn, updatedOn, field, setWarning){
 
       //If both valid date, compare
-      if (updatedOn < craetedOn){
+      if (moment(craetedOn).isAfter(updatedOn)){
         setWarning(field, "Warning: This date can't be bigger");
       }else{
         setWarning(field, null);

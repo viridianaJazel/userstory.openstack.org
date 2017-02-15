@@ -70,9 +70,14 @@
                         $scope.userStory.createdOn, 
                         'createdOn', setWarning);
 
-                    $scope.userStory.updatedOn = DateService.validateDate(
-                        $scope.userStory.updatedOn, 
-                        'updatedOn', setWarning);
+
+                    if($scope.userStory.updatedOn !=='') {
+                         $scope.userStory.updatedOn =  moment($scope.userStory.updatedOn, 
+                            "YYYY-MM-DD").format("MM-DD-YYYY");
+                     } else {
+                         $scope.userStory.updatedOn = $scope.userStory.createdOn;
+                     }
+
 
                     if(!$scope.warnings['createdOn']
                     && !$scope.warnings['updatedOn']){
