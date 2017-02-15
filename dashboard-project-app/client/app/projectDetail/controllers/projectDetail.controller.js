@@ -2,12 +2,13 @@
 (function () {
 
   angular.module('dashboardProjectApp')
-    .controller('projectDetailController', ['$scope','$state', 'UserStory', '$location',
-      function($scope, $state, UserStory, $location) {
+    .controller('projectDetailController', ['$scope','$state', 'UserStory', '$location', 'DateService',
+      function($scope, $state, UserStory, $location, DateService) {
 
         $scope.taskId = $state.params.id;
         $scope.openTasks = {};
-        $scope.showText = {}
+        $scope.showText = {};
+        $scope.warnings = {};
 
         $scope.closeTask = function(task){
           $scope.openTasks[task] = !$scope.openTasks[task];
@@ -35,8 +36,19 @@
 
           return 'fa fa-cog';
         }
-
         $scope.actualProject = {};
+
+        function setWarning(key, message){
+
+          if(message){
+            $scope.warnings[key] = {
+              message:message
+            }
+          }else{
+            $scope.warnings[key] = message
+          }
+            
+        }
 
         function getFile() {
             UserStory.findById({id:$scope.taskId},
@@ -53,15 +65,20 @@
                          description;
                      }
 
-                    $scope.userStory.createdOn = moment($scope.userStory.
-                        createdOn, "DD-MM-YYYY").format("MM-DD-YYYY");
 
-                     if($scope.userStory.updatedOn !=='') {
-                         $scope.userStory.updatedOn =  moment($scope.userStory.
-                             updatedOn, "YYYY-MM-DD").format("MM-DD-YYYY");
-                     } else {
-                         $scope.userStory.updatedOn = $scope.userStory.createdOn;
-                     }
+                    $scope.userStory.createdOn = DateService.validateDate(
+                        $scope.userStory.createdOn, 
+                        'createdOn', setWarning);
+
+                    $scope.userStory.updatedOn = DateService.validateDate(
+                        $scope.userStory.updatedOn, 
+                        'updatedOn', setWarning);
+
+                    if(!$scope.warnings['createdOn']
+                    && !$scope.warnings['updatedOn']){
+                        DateService.compareDates($scope.userStory.createdOn, 
+                        $scope.userStory.updatedOn, 'createdOn', setWarning);
+                    }
 
                      for(var key in $scope.userStory.tasks_status) {
                          $scope.actualProject[key] = $scope.userStory.
